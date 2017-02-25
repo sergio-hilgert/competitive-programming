@@ -1,66 +1,63 @@
 #include <bits/stdc++.h>
-#define MAX 10010
 
 using namespace std;
 
-vector <int> grafo[MAX];
-int visitados[MAX];
-int n, v, a, x, y;
+vector<int> graph[10010];
+int visit[10010];
+int ciclo;
+int v, a;
 
-void cVector(){
-	for(int i = 0; i < v; ++i){
-		grafo[i].clear();
+void reset(){
+	ciclo = 0;
+	for(int i = 0; i <= v; ++i){
+		visit[i] = 0;
+		graph[i].clear();
 	}
-}
+} 
 
-int ciclo(int inicio){
-	visitados[inicio] = 1;
-	for(int i = 0; i < grafo[inicio].size(); ++i){
-		int w = grafo[inicio][i];
-		if(visitados[w] == 3) {
+int has_cycle(int inicio){
+	visit[inicio] = 1;
+	
+	for(int i = 0; i < graph[inicio].size(); ++i){
+		if(visit[graph[inicio][i]] == 2)
 			continue;
-		}
-		if(visitados[w] == 1) {
+		
+		if(visit[graph[inicio][i]] == 1)
 			return 1;
-		}
-		if(ciclo(w) == 1) {
+			
+		if(has_cycle(graph[inicio][i]))
 			return 1;
-		}
 	}
-	visitados[inicio] = 3; 
+	
+	visit[inicio] = 2;
 	return 0;
 }
 
-
 int main(){
 	
-
+	int x, y, n;
+	
 	scanf("%d", &n);
-
+	
 	while(n--){
+		reset();
 		scanf("%d %d", &v, &a);
-		cVector();
-		memset(visitados, 0, sizeof visitados);
 		while(a--){
 			scanf("%d %d", &x, &y);
-			grafo[x].push_back(y);
+			graph[--x].push_back(--y);
 		}
-
-		int p = 0;
-
 		for(int i = 0; i < v; ++i){
-
-			if(!visitados[i] && ciclo(i)){
-				p = 1;
+			if(!visit[i] && graph[i].size() > 0){
+				if(has_cycle(i))
+					ciclo = 1;
 			}
-			
 		}
-		if(p) printf("SIM\n");
+		if(ciclo)
+			printf("SIM\n");
 		else
 			printf("NAO\n");
-
-
+		
 	}
-
+	
 	return 0;
 }
