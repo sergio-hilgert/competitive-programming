@@ -1,73 +1,57 @@
-# include <bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-vector <string> retornaVect(string s){
-    vector <string> v;
-    string palavra;
-    stringstream ss;
-    
-    ss.clear();
-    v.clear();
-    ss << s;
-    while(ss >> palavra) v.push_back(palavra);
-    
-    return v;
-    
-}
-
-
 int main(){
-    
-    string str;
-    int n, m, qnt, i, j, z;
-    long int total = 0;
-    hash_map < int, vector <string> > servers;
-    hash_map < int, vector <string> > users;
-    hash_map <int, vector <int> > connections;
-    
-    
-    while(true){
-        servers.clear();
-        users.clear();
-        connections.clear();
-        total = 0;
-        scanf("%d %d", &n, &m);
-        getchar();
-        if(n == 0 && m == 0) break;
-        
-        for(i = 0; i < n; ++i){
-            scanf("%d", &qnt);
-            getchar();
-            getline(cin, str);
-            servers[i] = retornaVect(str);
-            
-        }
-        for(i = 0; i < m; ++i){
-            scanf("%d", &qnt);
-            getchar();
-            getline(cin, str);
-            users[i] = retornaVect(str);
-            for(j = 0; j < users[i].size(); ++j){
-                for(z = 0; z < n; ++z)
-                    if(find(servers[z].begin(), servers[z].end(), users[i][j]) != servers[z].end()){
-                        if(connections.find(i) != connections.end()){
-                            if(find(connections[i].begin(), connections[i].end(), z) == connections[i].end()){
-                                connections[i].push_back(z); 
-                                ++total;
-                            }
-                        }else{
-                            connections[i].push_back(z);
-                            ++total;
-                        }
-                        
-                    }
-            }
-            
-            
-            
-        }
-        cout<< total<< endl;
+  
+  vector<string> servers[210];
+  vector<string> clients[210];
+  
+  int n, m, x, cont;
+  string str;
+  
+  while(scanf(" %d %d", &n, &m) && (m||n)){
+    cont = 0;
+    for(int i = 0; i < max(m,n); ++i){
+      servers[i].clear();
+      clients[i].clear();
     }
-
+    for(int i = 0; i < n; ++i){
+      scanf(" %d", &x);
+      while(x--){
+        cin >> str;
+        servers[i].push_back(str);
+      }
+    }
+    
+    for(int j = 0; j < m; ++j){
+      scanf(" %d", &x);
+      while(x--){
+        cin >> str;
+        clients[j].push_back(str);
+      }     
+    }
+    int ok = 0;
+    for(int i = 0; i < n; ++i){
+      for(int j = 0; j < m; ++j){
+        for(int k = 0; k < servers[i].size(); ++k){
+          for(int p = 0; p < clients[j].size(); ++p){
+            if(servers[i][k] == clients[j][p]){
+              ++cont;
+              ok = 1;
+              //cout << servers[i][k] << " " << clients[j][p] << endl;
+              break;
+            }
+          }
+          if(ok) break;
+        }
+        if(ok)
+          ok = 0;
+        
+      }
+    }
+    cout << cont << endl;
+  }
+    
+  return 0;
 }

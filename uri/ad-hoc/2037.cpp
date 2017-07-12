@@ -1,53 +1,47 @@
-# include <bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
+const int maxn = 16;
 
-    
-int main(){
-    
-    int n, j, x;
-    string str, p;
-    stringstream ss;
-    vector < queue<int> > v;
-    queue <int> q; 
-    string result;
-    
-    scanf("%d", &n);
-    while(n != -1){
-        v.clear();
-        while(!q.empty()) q.pop();
-        result = "";
-        getchar();
-        getline(cin, str);
-        ss << str;
-        while (ss >> p){
-            for(int i = 0; i < p.size(); ++i){
-                q.push(p[i] - '0');    
-            }    
-            v.push_back(q);
-            while(!q.empty()) q.pop();
-        }
-        for(int i = 0; i <=n-2; ++i){
-            cout<< "I: "<<i+2<< endl;
-            if(!v[i].empty()){
-                cout << v[i].front() << endl;
-                if(v[i].front() == 1){
-                    result += '0' + i+2;
-                    v[i].pop();
-                    i = -1;
-                }else if(i+2 == v[v[i].front()-2].front()){
-                    v[i].pop();
-                    v[v[i].front()-2].pop();
-                    i = -1;
-                }
-                
-            }
-        } 
-        cout << result << endl;
-        scanf("%d", &n);
+queue<int> q[maxn];
+
+void calc2(int atual, int anterior){
+  int front;
+  while(!q[atual].empty()){
+    front = q[atual].front(); q[atual].pop();
+    if(front == 1){
+      q[1].push(atual);
+      continue;
     }
-        
     
-    return 0;
+    calc2(front, atual);
+  }
+}
+int main(){
+  string str;
+  int n;
+  
+  while(scanf(" %d", &n) && n != -1){
+    for(int i = 2; i <= n; ++i)
+      while(!q[i].empty()) q[i].pop();
+    
+    for(int i = 2; i <= n; ++i){
+      cin >> str;
+      for(int j = 0; j < str.size(); ++j){
+        q[i].push(str[j] - '0');
+      }
+    }
+    // atual, anterior
+    calc2(2, 0);
+    
+    while(!q[1].empty()){
+      cout << q[1].front();
+      q[1].pop();
+    }
+    cout << endl;
+    
+  }  
+    
+  return 0;
 }
