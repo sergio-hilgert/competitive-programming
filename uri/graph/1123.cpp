@@ -62,7 +62,9 @@ int main(){
 				graph[y][x] = p;
 			}else if (x > c && y <= c){
 				graph[x][y] = p;
-			}else if(x <= c && y <= c && abs(x-y) == 1){
+			}else if (x <= c && y > c){
+				graph[y][x] = p;
+			}else if(abs(x-y) == 1){ // x <= c && y <= c && 
 				if(x > y)
 					swap(x, y);
 				graph[x][y] = p;
