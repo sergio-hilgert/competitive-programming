@@ -2,21 +2,27 @@
 
 using namespace std;
 
-typedef struct arvore{
-    char letra;
-    int peso;
-    arvore *dir;
-    arvore *esq;
-} arvore;
+string prefix, infix;
+int pos;
 
-map<char,int> m;
-char in[30], pre[30];
+void edr(int i, int j){
+  if(i <= j){
+    int next = infix.find(prefix[pos++]);
+    edr(i, next-1);
+    edr(next+1, j);
+    printf("%c", infix[next]);
+  }
+}
 
 int main(){
     
     
+  while(cin >> prefix >> infix){
+    pos = 0;
+    edr(0, prefix.size()-1);
+    printf("\n");
+  }
     
     
-    
-    return 0;
+  return 0;
 }

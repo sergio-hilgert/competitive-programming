@@ -5,12 +5,12 @@ const int maxn = 10010;
 const int inf = 0x3f3f3f3f;
 
 struct edge{
-	// next node connected
-	int next;
+	// node connected
+	int node;
 	long long weight;
 	
 	// constructor
-	edge(int t, long long w) : next(t), weight(w) {}
+	edge(int t, long long w) : node(t), weight(w) {}
 	
 	// operator for the priority_queue
 	bool operator < (const edge &o) const {
@@ -30,11 +30,11 @@ void make_even(int inicio){
 	visit[inicio] = 1;
 	for(int i = 0; i < graph[inicio].size(); ++i){
 		edge atual = graph[inicio][i];
-		for(int j = 0; j < graph[atual.next].size(); ++j){
-			edge proxima = graph[atual.next][j];
-			if(inicio != proxima.next)
-				even_graph[inicio].push_back(edge(proxima.next, atual.weight + proxima.weight));
-			make_even(proxima.next);
+		for(int j = 0; j < graph[atual.node].size(); ++j){
+			edge proxima = graph[atual.node][j];
+			if(inicio != proxima.node)
+				even_graph[inicio].push_back(edge(proxima.node, atual.weight + proxima.weight));
+			make_even(proxima.node);
 		}
 	}
 }
@@ -48,15 +48,15 @@ void dj(int inicio, int fim){
 	
 	while(!pq.empty()){
 		edge atual = pq.top(); pq.pop();
-		if(dist[atual.next] > atual.weight)
+		if(dist[atual.node] > atual.weight)
 			continue;
 		
-		for(int i = 0; i < even_graph[atual.next].size(); ++i){
-			edge proxima = even_graph[atual.next][i];
+		for(int i = 0; i < even_graph[atual.node].size(); ++i){
+			edge proxima = even_graph[atual.node][i];
 			path = atual.weight + proxima.weight;
-			if(path < dist[proxima.next]){
-				dist[proxima.next] = path;
-				pq.push(edge(proxima.next, path));
+			if(path < dist[proxima.node]){
+				dist[proxima.node] = path;
+				pq.push(edge(proxima.node, path));
 			}
 				
 		}
